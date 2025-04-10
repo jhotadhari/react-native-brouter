@@ -8,6 +8,13 @@ React native modules for android, to communicate with the brouter app service fo
 npm install react-native-brouter
 ```
 
+Add this to your apps `AndroidManifest.xml`:
+```
+<queries>
+    <package android:name="btools.routingapp" />
+</queries>
+```
+
 ## Usage
 
 
@@ -30,4 +37,5 @@ MIT
 
 ---
 
-Made with [create-react-native-library](https://github.com/callstack/react-native-builder-bob)
+- Made with [create-react-native-library](https://github.com/callstack/react-native-builder-bob)
+- The java code to connect to the BRouter service is copied from [OsmAnd](https://github.com/osmandapp/OsmAnd) app.

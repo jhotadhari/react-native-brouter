@@ -1,7 +1,7 @@
 {
   "name": "react-native-brouter",
-  "version": "0.1.0",
-  "description": "React native modules for android, to communicate with the brouter app service for offline navigation based on open data",
+  "version": "0.0.1",
+  "description": "React native turbo module for android, to communicate with the brouter app service for offline navigation based on open data",
   "source": "./src/index.tsx",
   "main": "./lib/module/index.js",
   "types": "./lib/typescript/src/index.d.ts",
