@@ -1,5 +1,5 @@
-import BRouter from './NativeBRouter';
+import BRouter, { type GetTrackParams } from './NativeBRouter';
 
-export function multiply(a: number, b: number): number {
-  return BRouter.multiply(a, b);
+export function getTrackFromParams( params: GetTrackParams ): Promise<string> {
+	return BRouter.getTrackFromParams( params );
 }
