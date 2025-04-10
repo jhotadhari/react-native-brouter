@@ -1,5 +1,5 @@
-import Brouter from './NativeBrouter';
+import BRouter from './NativeBRouter';
 
 export function multiply(a: number, b: number): number {
-  return Brouter.multiply(a, b);
+  return BRouter.multiply(a, b);
 }

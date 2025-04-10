@@ -44,7 +44,7 @@
     "routing",
     "navigation",
     "router",
-    "Brouter",
+    "BRouter",
     "gpx"
   ],
   "repository": {
@@ -151,7 +151,7 @@
     ]
   },
   "codegenConfig": {
-    "name": "RNBrouterSpec",
+    "name": "RNBRouterSpec",
     "type": "modules",
     "jsSrcsDir": "src",
     "outputDir": {
@@ -159,7 +159,7 @@
       "android": "android/generated"
     },
     "android": {
-      "javaPackageName": "com.brouter"
+      "javaPackageName": "com.jhotadhari.reactnative.brouter"
     },
     "includesGeneratedCode": true
   },

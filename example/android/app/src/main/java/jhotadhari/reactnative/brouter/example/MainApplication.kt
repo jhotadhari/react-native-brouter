@@ -1,4 +1,4 @@
-package brouter.example
+package jhotadhari.reactnative.brouter.example
 
 import android.app.Application
 import com.facebook.react.PackageList
