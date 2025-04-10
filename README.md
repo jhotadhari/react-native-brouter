@@ -9,7 +9,7 @@ npm install react-native-brouter
 ```
 
 Add this to your apps `AndroidManifest.xml`:
-```
+```xml
 <queries>
     <package android:name="btools.routingapp" />
 </queries>
@@ -19,13 +19,25 @@ Add this to your apps `AndroidManifest.xml`:
 
 
 ```js
-import { multiply } from 'react-native-brouter';
+import { getTrackFromParams } from 'react-native-brouter';
 
 // ...
 
-const result = multiply(3, 7);
+getTrackFromParams( {
+    lonlats: [
+        '-71.047736,-13.950089',
+        '-70.902377,-13.791436',
+        '-70.97545,-13.591525',
+    ].join( '|' ),
+    trackFormat: 'json',
+    fast: false,
+    v: 'bicycle',
+} ).then( ( result: string ) => {
+    console.log( result );
+} ).catch( ( e: any ) => {
+    console.log( e?.userInfo?.errorMsg );
+} )
 ```
-
 
 ## Contributing
 
