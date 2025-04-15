@@ -48,6 +48,7 @@ public class BRouterModule extends NativeBRouterSpec {
 		return brouterParams;
 	}
 
+	@Override
 	public void getTrackFromParams( ReadableMap params, Promise promise ) {
 		WritableMap error = new WritableNativeMap();
 		try {
