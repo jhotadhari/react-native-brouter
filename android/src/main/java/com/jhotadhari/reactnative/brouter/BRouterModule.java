@@ -59,7 +59,7 @@ public class BRouterModule extends NativeBRouterSpec {
 			IBRouterService brouterService = brouterConnector.getBRouterService();
 			if ( brouterService == null ) {
 				error.putString( "errorMsg", "BRouter service is not available" );
-				promise.reject( "error", error );
+				promise.reject( "error", error ); return;
 			}
 			String track = brouterService.getTrackFromParams( convertParams( params ) );
 			promise.resolve( track );
