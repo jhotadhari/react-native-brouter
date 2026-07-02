@@ -10,6 +10,10 @@
       "types": "./lib/typescript/src/index.d.ts",
       "default": "./lib/module/index.js"
     },
+    "./geojson": {
+      "types": "./lib/typescript/src/geojson/index.d.ts",
+      "default": "./lib/module/geojson/index.js"
+    },
     "./package.json": "./package.json"
   },
   "files": [
@@ -163,5 +167,8 @@
     "type": "turbo-module",
     "languages": "kotlin-objc",
     "version": "0.49.7"
+  },
+  "dependencies": {
+    "@types/geojson": "^7946.0.16"
   }
 }

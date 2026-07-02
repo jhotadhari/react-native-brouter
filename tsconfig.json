@@ -2,7 +2,8 @@
   "compilerOptions": {
     "rootDir": ".",
     "paths": {
-      "react-native-brouter": ["./src/index"]
+      "react-native-brouter": ["./src/index"],
+      "react-native-brouter/geojson": ["./src/geojson/index"]
     },
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
