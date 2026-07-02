@@ -171,18 +171,18 @@ function parseJsonTrack(
 			trackPointCount += coords.length;
 
 			// Extract summary from feature properties
-			if (feature.properties['total-distance']) {
+			if (feature.properties['track-length'] != null) {
 				totalDistanceMeters = Number(
-					feature.properties['total-distance']
+					feature.properties['track-length']
 				);
 			}
-			if (feature.properties['total-time']) {
+			if (feature.properties['total-time'] != null) {
 				totalDurationSeconds = Number(feature.properties['total-time']);
 			}
-			if (feature.properties['filtered ascend']) {
+			if (feature.properties['filtered ascend'] != null) {
 				ascentMeters = Number(feature.properties['filtered ascend']);
 			}
-			if (feature.properties['plain-descent']) {
+			if (feature.properties['plain-descent'] != null) {
 				descentMeters = Number(feature.properties['plain-descent']);
 			}
 		}
@@ -267,8 +267,11 @@ export async function getRoute(
 	if (result.format === 'json') {
 		try {
 			geoResult.parsed = parseJsonTrack(result.raw, request.waypoints);
-		} catch {
-			// Parsing is best-effort — raw string is always available
+		} catch (e: unknown) {
+			console.warn(
+				'Failed to parse BRouter JSON track:',
+				e instanceof Error ? e.message : String(e)
+			);
 		}
 	}
 

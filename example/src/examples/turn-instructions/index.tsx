@@ -258,11 +258,11 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default TurnInstructionsExample;
-
-export const example: Example = {
+const example: Example = {
 	key: 'turn-instructions',
 	label: 'Turn Instructions',
 	category: 'advanced',
 	ExampleComponent: TurnInstructionsExample,
 };
+
+export default example;

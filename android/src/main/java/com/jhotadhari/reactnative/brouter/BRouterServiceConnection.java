@@ -16,7 +16,7 @@ import btools.routingapp.IBRouterService;
  */
 public class BRouterServiceConnection implements ServiceConnection {
 
-	private IBRouterService brouterService;
+	private volatile IBRouterService brouterService;
 
 	public void onServiceConnected(ComponentName className, IBinder boundService) {
 		brouterService = IBRouterService.Stub.asInterface(boundService);

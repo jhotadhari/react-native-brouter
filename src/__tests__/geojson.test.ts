@@ -133,7 +133,7 @@ describe('geojson/getRoute', () => {
 					],
 				},
 				properties: {
-					'total-distance': 15000,
+					'track-length': 15000,
 					'total-time': 3600,
 					'filtered ascend': 200,
 					'plain-descent': 150,

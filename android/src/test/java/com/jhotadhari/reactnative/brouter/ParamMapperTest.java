@@ -192,7 +192,7 @@ public class ParamMapperTest {
 		Bundle b = mock(Bundle.class);
 		ParamMapper.toBundle(params, b);
 
-		verify(b).putInt("maxRunningTime", 120);
+		verify(b).putString("maxRunningTime", "120");
 	}
 
 	@Test

@@ -6,9 +6,6 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableType;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -32,8 +29,8 @@ public final class ParamMapper {
 	 * {@code IBRouterService.getTrackFromParams(Bundle)}.
 	 */
 	@NonNull
-	public static Bundle toBundle(@NonNull ReadableMap params) {
-		return toBundle(params, new Bundle());
+	public static Bundle toBundle( @NonNull ReadableMap params ) {
+		return toBundle( params, new Bundle() );
 	}
 
 	/**
@@ -41,104 +38,104 @@ public final class ParamMapper {
 	 * with a mocked Bundle).
 	 */
 	@NonNull
-	static Bundle toBundle(@NonNull ReadableMap params, @NonNull Bundle b) {
+	static Bundle toBundle( @NonNull ReadableMap params, @NonNull Bundle b ) {
 
 		// ── Waypoints ──────────────────────────────────────────────
 		// JS pre-serializes waypoints into lonlats, lats, lons, straight
-		putString(b, params, "lonlats");
-		putDoubleArray(b, params, "lats");
-		putDoubleArray(b, params, "lons");
-		putString(b, params, "straight");
+		putString( b, params, "lonlats" );
+		putDoubleArray( b, params, "lats" );
+		putDoubleArray( b, params, "lons" );
+		putString( b, params, "straight" );
 
 		// ── Profile ────────────────────────────────────────────────
-		putString(b, params, "profile");
-		putString(b, params, "remoteProfile");
+		putString( b, params, "profile" );
+		putString( b, params, "remoteProfile" );
 
 		// ── Vehicle / speed ────────────────────────────────────────
-		putString(b, params, "v");
-		if (params.hasKey("fast")) {
-			b.putInt("fast", params.getInt("fast"));
+		putString( b, params, "v" );
+		if ( params.hasKey( "fast" ) ) {
+			b.putInt( "fast", params.getInt( "fast" ) );
 		}
 
 		// ── Output format ──────────────────────────────────────────
-		putString(b, params, "trackFormat");
+		putString( b, params, "trackFormat" );
 
 		// ── Alternative index ──────────────────────────────────────
-		if (params.hasKey("alternativeidx")) {
-			b.putInt("alternativeidx", params.getInt("alternativeidx"));
+		if ( params.hasKey( "alternativeidx" ) ) {
+			b.putInt( "alternativeidx", params.getInt( "alternativeidx" ) );
 		}
 
 		// ── Export waypoints ───────────────────────────────────────
-		if (params.hasKey("exportWaypoints")) {
-			b.putInt("exportWaypoints", params.getInt("exportWaypoints"));
+		if ( params.hasKey( "exportWaypoints" ) ) {
+			b.putInt( "exportWaypoints", params.getInt( "exportWaypoints" ) );
 		}
 
 		// ── Turn instructions ──────────────────────────────────────
-		putString(b, params, "turnInstructionFormat");
-		if (params.hasKey("timode")) {
-			b.putInt("timode", params.getInt("timode"));
+		putString( b, params, "turnInstructionFormat" );
+		if ( params.hasKey( "timode" ) ) {
+			b.putInt( "timode", params.getInt( "timode" ) );
 		}
 
 		// ── Heading / direction ────────────────────────────────────
-		if (params.hasKey("heading")) {
-			b.putDouble("heading", params.getDouble("heading"));
+		if ( params.hasKey( "heading" ) ) {
+			b.putDouble( "heading", params.getDouble( "heading" ) );
 		}
-		if (params.hasKey("direction")) {
-			b.putDouble("direction", params.getDouble("direction"));
+		if ( params.hasKey( "direction" ) ) {
+			b.putDouble( "direction", params.getDouble( "direction" ) );
 		}
 
 		// ── Engine mode (elevation) ────────────────────────────────
-		if (params.hasKey("engineMode")) {
-			b.putInt("engineMode", params.getInt("engineMode"));
+		if ( params.hasKey( "engineMode" ) ) {
+			b.putInt( "engineMode", params.getInt( "engineMode" ) );
 		}
 
 		// ── Timeout ────────────────────────────────────────────────
-		if (params.hasKey("maxRunningTime")) {
-			b.putInt("maxRunningTime", params.getInt("maxRunningTime"));
+		if ( params.hasKey( "maxRunningTime" ) ) {
+			b.putString( "maxRunningTime", String.valueOf( params.getInt( "maxRunningTime" ) ) );
 		}
 
 		// ── File output ────────────────────────────────────────────
-		putString(b, params, "pathToFileResult");
+		putString( b, params, "pathToFileResult" );
 
 		// ── Compression ────────────────────────────────────────────
-		if (params.hasKey("acceptCompressedResult")) {
-			b.putBoolean("acceptCompressedResult", params.getBoolean("acceptCompressedResult"));
+		if ( params.hasKey( "acceptCompressedResult" ) ) {
+			b.putBoolean( "acceptCompressedResult", params.getBoolean( "acceptCompressedResult" ) );
 		}
 
 		// ── Extra params (profile setup key=value) ─────────────────
-		if (params.hasKey("extraParams")) {
-			ReadableMap extra = params.getMap("extraParams");
-			if (extra != null) {
+		if ( params.hasKey( "extraParams" ) ) {
+			ReadableMap extra = params.getMap( "extraParams" );
+			if ( extra != null ) {
 				Bundle extraBundle = new Bundle();
 				com.facebook.react.bridge.ReadableMapKeySetIterator iterator =
 					extra.keySetIterator();
-				while (iterator.hasNextKey()) {
+				while ( iterator.hasNextKey() ) {
 					String key = iterator.nextKey();
-					ReadableType type = extra.getType(key);
-					if (type == ReadableType.String) {
-						extraBundle.putString(key, extra.getString(key));
-					} else if (type == ReadableType.Number) {
-						extraBundle.putDouble(key, extra.getDouble(key));
-					} else if (type == ReadableType.Boolean) {
-						extraBundle.putBoolean(key, extra.getBoolean(key));
+					ReadableType type = extra.getType( key );
+					if ( type == ReadableType.String ) {
+						extraBundle.putString( key, extra.getString( key ) );
+					} else if ( type == ReadableType.Number ) {
+						extraBundle.putDouble( key, extra.getDouble( key ) );
+					} else if ( type == ReadableType.Boolean ) {
+						extraBundle.putBoolean( key, extra.getBoolean( key ) );
 					}
 				}
-				b.putBundle("extraParams", extraBundle);
+				b.putBundle( "extraParams", extraBundle );
 			}
 		}
 
 		// ── Nogo areas ─────────────────────────────────────────────
-		putString(b, params, "nogos");
-		putDoubleArray(b, params, "nogoLats");
-		putDoubleArray(b, params, "nogoLons");
-		putDoubleArray(b, params, "nogoRadi");
+		putString( b, params, "nogos" );
+		putDoubleArray( b, params, "nogoLats" );
+		putDoubleArray( b, params, "nogoLons" );
+		putDoubleArray( b, params, "nogoRadi" );
 
 		// ── Polylines / polygons ──────────────────────────────────
-		putString(b, params, "polylines");
-		putString(b, params, "polygons");
+		putString( b, params, "polylines" );
+		putString( b, params, "polygons" );
 
 		// ── POIs ──────────────────────────────────────────────────
-		putString(b, params, "pois");
+		putString( b, params, "pois" );
 
 		return b;
 	}
@@ -150,10 +147,10 @@ public final class ParamMapper {
 		@NonNull ReadableMap params,
 		@NonNull String key
 	) {
-		if (params.hasKey(key)) {
-			String value = params.getString(key);
-			if (value != null) {
-				b.putString(key, value);
+		if ( params.hasKey( key ) ) {
+			String value = params.getString( key );
+			if ( value != null ) {
+				b.putString( key, value );
 			}
 		}
 	}
@@ -163,14 +160,14 @@ public final class ParamMapper {
 		@NonNull ReadableMap params,
 		@NonNull String key
 	) {
-		if (params.hasKey(key)) {
-			ReadableArray arr = params.getArray(key);
-			if (arr != null && arr.size() > 0) {
-				double[] doubles = new double[arr.size()];
-				for (int i = 0; i < arr.size(); i++) {
-					doubles[i] = arr.getDouble(i);
+		if ( params.hasKey( key ) ) {
+			ReadableArray arr = params.getArray( key );
+			if ( arr != null && arr.size() > 0 ) {
+				double[] doubles = new double[ arr.size() ];
+				for ( int i = 0; i < arr.size(); i++ ) {
+					doubles[ i ] = arr.getDouble( i );
 				}
-				b.putDoubleArray(key, doubles);
+				b.putDoubleArray( key, doubles );
 			}
 		}
 	}

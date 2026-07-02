@@ -163,7 +163,7 @@ public class BRouterClientTest {
 		}
 	}
 
-	@Test(expected = IllegalStateException.class)
+	@Test
 	public void getRouteThrowsWhenServiceUnavailable() throws Exception {
 		try (MockedStatic<BRouterServiceConnection> mockedStatic =
 				mockStatic(BRouterServiceConnection.class)) {
@@ -173,8 +173,36 @@ public class BRouterClientTest {
 			).thenReturn(null);
 
 			BRouterClient client = new BRouterClient(mockContext, 500);
-			client.getRoute(new Bundle());
+			try {
+				client.getRoute(new Bundle());
+				fail("Expected IllegalStateException");
+			} catch (IllegalStateException e) {
+				assertEquals(BRouterError.SERVICE_NOT_INSTALLED, e.getMessage());
+			}
 		}
+	}
+
+	@Test
+	public void getLastErrorReturnsCodeAfterFailedConnect() {
+		try (MockedStatic<BRouterServiceConnection> mockedStatic =
+				mockStatic(BRouterServiceConnection.class)) {
+
+			mockedStatic.when(() ->
+				BRouterServiceConnection.connect(any(Context.class))
+			).thenReturn(null);
+
+			BRouterClient client = new BRouterClient(mockContext, 500);
+			IBRouterService service = client.connect();
+
+			assertNull(service);
+			assertEquals(BRouterError.SERVICE_NOT_INSTALLED, client.getLastError());
+		}
+	}
+
+	@Test
+	public void getConnectTimeoutMsReturnsStoredValue() {
+		BRouterClient client = new BRouterClient(mockContext, 2000);
+		assertEquals(2000, client.getConnectTimeoutMs());
 	}
 
 	// ── disconnect() ───────────────────────────────────────────────

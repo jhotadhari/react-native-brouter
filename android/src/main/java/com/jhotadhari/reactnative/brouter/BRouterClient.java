@@ -29,11 +29,18 @@ public class BRouterClient {
 	private BRouterServiceConnection connection;
 
 	/**
+	 * The error code from the most recent failed {@link #connect()} call,
+	 * or {@code null} if the last connection attempt succeeded.
+	 */
+	@Nullable
+	private String lastError;
+
+	/**
 	 * @param ctx              Android context used to bind the BRouter service.
 	 * @param connectTimeoutMs maximum time (ms) to wait for the service process
 	 *                         to start. Default 1000.
 	 */
-	public BRouterClient(@NonNull Context ctx, int connectTimeoutMs) {
+	public BRouterClient( @NonNull Context ctx, int connectTimeoutMs ) {
 		this.ctx = ctx.getApplicationContext();
 		this.connectTimeoutMs = connectTimeoutMs;
 	}
@@ -43,50 +50,88 @@ public class BRouterClient {
 	 *
 	 * <p>Safe to call multiple times — if already connected this is a no-op.
 	 *
+	 * <p>The early-return / connection-creation path is synchronized, but the
+	 * polling loop runs outside the monitor so that a main-thread
+	 * {@link #disconnect()} (via {@code invalidate()}) is not blocked.
+	 *
 	 * @return the AIDL service interface, or {@code null} if the connection
-	 *         could not be established.
+	 *         could not be established.  Call {@link #getLastError()} for
+	 *         the specific failure code.
 	 */
 	@Nullable
-	public synchronized IBRouterService connect() {
-		if (connection != null) {
-			IBRouterService svc = connection.getBRouterService();
-			if (svc != null && svc.asBinder().isBinderAlive()) {
-				return svc;
-			}
-			// Binder died — reconnect below
-			disconnect();
-		}
+	public IBRouterService connect() {
+		BRouterServiceConnection localConn;
 
-		connection = BRouterServiceConnection.connect(ctx);
-		if (connection == null) {
-			return null;
+		synchronized ( this ) {
+			if ( connection != null ) {
+				IBRouterService svc = connection.getBRouterService();
+				if ( svc != null && svc.asBinder().isBinderAlive() ) {
+					lastError = null;
+					return svc;
+				}
+				// Binder died — reconnect below
+				disconnect();
+			}
+
+			connection = BRouterServiceConnection.connect( ctx );
+			if ( connection == null ) {
+				lastError = BRouterError.SERVICE_NOT_INSTALLED;
+				return null;
+			}
+			localConn = connection;
 		}
 
 		// Poll until the service process starts, or timeout.
 		// Pattern copied from OsmAnd — the service process needs time to start
 		// after the bind intent fires, and there is no callback for "process ready".
+		// Polling runs OUTSIDE the synchronized block so that a main-thread
+		// invalidate() -> disconnect() can proceed without blocking.
 		int i = 0;
 		try {
-			while (connection.getBRouterService() == null && i * 100 < connectTimeoutMs) {
-				Thread.sleep(100);
+			while ( localConn.getBRouterService() == null && i * 100 < connectTimeoutMs ) {
+				Thread.sleep( 100 );
 				i += 1;
 			}
-		} catch (InterruptedException e) {
+		} catch ( InterruptedException e ) {
 			Thread.currentThread().interrupt();
+			lastError = BRouterError.CONNECTION_TIMEOUT;
 			disconnect();
 			return null;
-		} catch (Exception e) {
+		} catch ( Exception e ) {
 			e.printStackTrace();
+			lastError = BRouterError.UNKNOWN;
 			disconnect();
 			return null;
 		}
 
-		if (connection.getBRouterService() == null) {
+		if ( localConn.getBRouterService() == null ) {
+			lastError = BRouterError.CONNECTION_TIMEOUT;
 			disconnect();
 			return null;
 		}
 
-		return connection.getBRouterService();
+		lastError = null;
+		return localConn.getBRouterService();
+	}
+
+	/**
+	 * Return the error code from the most recent failed {@link #connect()}
+	 * call, or {@code null} if the last connection attempt succeeded.
+	 *
+	 * <p>Use this after {@link #connect()} returns {@code null} (or
+	 * {@link #getRoute} throws) to distinguish "app not installed" from a
+	 * transient connection timeout.
+	 */
+	@Nullable
+	public String getLastError() {
+		return lastError;
+	}
+
+	/**
+	 * Return the connection timeout in milliseconds.
+	 */
+	public int getConnectTimeoutMs() {
+		return connectTimeoutMs;
 	}
 
 	/**
@@ -97,16 +142,17 @@ public class BRouterClient {
 	 */
 	@Nullable
 	public synchronized IBRouterService getService() {
-		if (connection == null) {
+		if ( connection == null ) {
 			return connect();
 		}
 		IBRouterService service = connection.getBRouterService();
-		if (service == null) {
+		if ( service == null ) {
 			return connect();
 		}
-		if (!service.asBinder().isBinderAlive()) {
+		if ( ! service.asBinder().isBinderAlive() ) {
 			return connect();
 		}
+		lastError = null;
 		return service;
 	}
 
@@ -115,22 +161,25 @@ public class BRouterClient {
 	 *
 	 * @param params the Bundle produced by {@link ParamMapper#toBundle}.
 	 * @return the track result string, or {@code null} if routing failed.
-	 * @throws Exception if the service is unavailable or the call fails.
+	 * @throws IllegalStateException if the service is unavailable (call
+	 *         {@link #getLastError()} for the specific error code).
+	 * @throws Exception if the AIDL call itself fails.
 	 */
 	@Nullable
-	public String getRoute(@NonNull android.os.Bundle params) throws Exception {
+	public String getRoute( @NonNull android.os.Bundle params ) throws Exception {
 		IBRouterService service = getService();
-		if (service == null) {
-			throw new IllegalStateException("BRouter service is not available");
+		if ( service == null ) {
+			String code = lastError != null ? lastError : BRouterError.SERVICE_UNAVAILABLE;
+			throw new IllegalStateException( code );
 		}
-		return service.getTrackFromParams(params);
+		return service.getTrackFromParams( params );
 	}
 
 	/**
 	 * Whether the service is currently connected and alive.
 	 */
 	public synchronized boolean isConnected() {
-		if (connection == null) {
+		if ( connection == null ) {
 			return false;
 		}
 		IBRouterService svc = connection.getBRouterService();
@@ -144,10 +193,10 @@ public class BRouterClient {
 	 * {@link #connect()} will create a fresh binding.
 	 */
 	public synchronized void disconnect() {
-		if (connection != null) {
+		if ( connection != null ) {
 			try {
-				connection.disconnect(ctx);
-			} catch (Exception e) {
+				connection.disconnect( ctx );
+			} catch ( Exception e ) {
 				// Best-effort cleanup — the context may already be gone.
 			}
 			connection = null;

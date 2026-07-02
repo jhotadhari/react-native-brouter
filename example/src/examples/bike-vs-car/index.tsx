@@ -79,9 +79,10 @@ function formatDistance(meters: number): string {
  * Format a duration in seconds into a human-readable string (h m s).
  */
 function formatDuration(seconds: number): string {
-	const h = Math.floor(seconds / 3600);
-	const m = Math.floor((seconds % 3600) / 60);
-	const s = Math.round(seconds % 60);
+	const absSeconds = Math.abs(seconds);
+	const h = Math.floor(absSeconds / 3600);
+	const m = Math.floor((absSeconds % 3600) / 60);
+	const s = Math.round(absSeconds % 60);
 
 	const parts: string[] = [];
 	if (h > 0) {
@@ -91,7 +92,8 @@ function formatDuration(seconds: number): string {
 		parts.push(`${m}m`);
 	}
 	parts.push(`${s}s`);
-	return parts.join(' ');
+	const formatted = parts.join(' ');
+	return seconds < 0 ? `-${formatted}` : formatted;
 }
 
 /**
@@ -104,8 +106,6 @@ const BikeVsCar: FC<{ height: number; width: number }> = ({
 	height,
 	width,
 }) => {
-	const [, setBikeResult] = useState<RouteResult | null>(null);
-	const [, setCarResult] = useState<RouteResult | null>(null);
 	const [bikeParsed, setBikeParsed] = useState<ParsedRoute | null>(null);
 	const [carParsed, setCarParsed] = useState<ParsedRoute | null>(null);
 	const [bikeLoading, setBikeLoading] = useState(false);
@@ -119,12 +119,10 @@ const BikeVsCar: FC<{ height: number; width: number }> = ({
 		if (isBike) {
 			setBikeLoading(true);
 			setBikeError(null);
-			setBikeResult(null);
 			setBikeParsed(null);
 		} else {
 			setCarLoading(true);
 			setCarError(null);
-			setCarResult(null);
 			setCarParsed(null);
 		}
 
@@ -137,10 +135,8 @@ const BikeVsCar: FC<{ height: number; width: number }> = ({
 			.then((route) => {
 				const parsed = parseRoute(route);
 				if (isBike) {
-					setBikeResult(route);
 					setBikeParsed(parsed);
 				} else {
-					setCarResult(route);
 					setCarParsed(parsed);
 				}
 			})
