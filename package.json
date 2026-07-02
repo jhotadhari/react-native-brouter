@@ -87,6 +87,7 @@
     "react": "19.0.0",
     "react-native": "0.78.2",
     "react-native-builder-bob": "^0.40.4",
+    "release-kit": "file:.yalc/release-kit",
     "turbo": "^1.10.7",
     "typescript": "^5.2.2"
   },
@@ -148,7 +149,6 @@
     "version": "0.49.7"
   },
   "dependencies": {
-    "@types/geojson": "^7946.0.16",
-    "release-kit": "file:.yalc/release-kit"
+    "@types/geojson": "^7946.0.16"
   }
 }

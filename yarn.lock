@@ -10293,7 +10293,7 @@ __metadata:
 
 "release-kit@file:.yalc/release-kit::locator=react-native-brouter%40workspace%3A.":
   version: 0.0.1
-  resolution: "release-kit@file:.yalc/release-kit#.yalc/release-kit::hash=bf6de5&locator=react-native-brouter%40workspace%3A."
+  resolution: "release-kit@file:.yalc/release-kit#.yalc/release-kit::hash=c2031d&locator=react-native-brouter%40workspace%3A."
   dependencies:
     "@octokit/rest": ^22.0.1
     commander: ^15.0.0
@@ -10304,7 +10304,7 @@ __metadata:
     tsx: ^4.22.4
   bin:
     release-kit: ./bin/release-kit.js
-  checksum: ab73329162973b6e2bb59c22671e89386d728db26d685bdbea6c92a55fe5d03a9ca8ac5e984056977cc3af61058aadab25e698cfe3b5c874eef70bf2b9e5afc6
+  checksum: ce6c6490b3f75c900abf613ebc55deceec1ee8a401c9c1035cf803a7b767ff61b7754335beae3a92eab7b26ecd21e98e456643f21b7023aea3293a585acf1173
   languageName: node
   linkType: hard
 
