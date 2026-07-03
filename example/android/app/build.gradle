@@ -77,9 +77,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "brouter.example"
+    namespace "jhotadhari.reactnative.brouter.example"
     defaultConfig {
-        applicationId "brouter.example"
+        applicationId "jhotadhari.reactnative.brouter.example"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

@@ -1,6 +1,6 @@
 buildscript {
   ext.getExtOrDefault = {name ->
-    return rootProject.ext.has(name) ? rootProject.ext.get(name) : project.properties['Brouter_' + name]
+    return rootProject.ext.has(name) ? rootProject.ext.get(name) : project.properties['BRouter_' + name]
   }
 
   repositories {
@@ -9,7 +9,7 @@ buildscript {
   }
 
   dependencies {
-    classpath "com.android.tools.build:gradle:8.7.2"
+    classpath "com.android.tools.build:gradle:8.9.1"
     // noinspection DifferentKotlinGradleVersion
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${getExtOrDefault('kotlinVersion')}"
   }
@@ -22,7 +22,7 @@ apply plugin: "kotlin-android"
 apply plugin: "com.facebook.react"
 
 def getExtOrIntegerDefault(name) {
-  return rootProject.ext.has(name) ? rootProject.ext.get(name) : (project.properties["Brouter_" + name]).toInteger()
+  return rootProject.ext.has(name) ? rootProject.ext.get(name) : (project.properties["BRouter_" + name]).toInteger()
 }
 
 def supportsNamespace() {
@@ -36,7 +36,7 @@ def supportsNamespace() {
 
 android {
   if (supportsNamespace()) {
-    namespace "com.brouter"
+    namespace "com.jhotadhari.reactnative.brouter"
 
     sourceSets {
       main {
@@ -54,6 +54,7 @@ android {
 
   buildFeatures {
     buildConfig true
+    aidl true
   }
 
   buildTypes {
@@ -64,6 +65,10 @@ android {
 
   lintOptions {
     disable "GradleCompatible"
+  }
+
+  testOptions {
+    unitTests.returnDefaultValues = true
   }
 
   compileOptions {
@@ -91,10 +96,15 @@ def kotlin_version = getExtOrDefault("kotlinVersion")
 dependencies {
   implementation "com.facebook.react:react-android"
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+  testImplementation "junit:junit:4.13.2"
+  testImplementation "org.mockito:mockito-core:5.1.1"
+  testImplementation "net.bytebuddy:byte-buddy:1.14.12"
+  testImplementation "net.bytebuddy:byte-buddy-agent:1.14.12"
 }
 
 react {
   jsRootDir = file("../src/")
-  libraryName = "Brouter"
-  codegenJavaPackageName = "com.brouter"
+  libraryName = "BRouter"
+  codegenJavaPackageName = "com.jhotadhari.reactnative.brouter"
 }
