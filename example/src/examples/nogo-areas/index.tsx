@@ -80,6 +80,7 @@ const NogoAreasExample: FC<{ height: number; width: number }> = ({
 
 		getRoute({
 			waypoints: WAYPOINTS,
+			vehicle: 'bicycle',
 			format: 'gpx',
 			nogos: activeNogos.length > 0 ? activeNogos : undefined,
 		})
