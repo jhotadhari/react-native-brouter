@@ -1,5 +1,12 @@
 import { useCallback, useState, type FC } from 'react';
-import { Button, Pressable, ScrollView, Text, View } from 'react-native';
+import {
+	Button,
+	Pressable,
+	ScrollView,
+	StyleSheet,
+	Text,
+	View,
+} from 'react-native';
 
 import {
 	getRoute,
@@ -55,12 +62,15 @@ const GeoJSONWaypointsExample: FC<{ height: number; width: number }> = ({
 
 	const summary = result?.parsed?.summary;
 
+	const bikeWeight = profile === 'bicycle' ? 'bold' : 'normal';
+	const footWeight = profile === 'foot' ? 'bold' : 'normal';
+
 	return (
-		<View style={{ flex: 1 }}>
+		<View style={styles.container}>
 			{/* Result display */}
 			<ScrollView
-				style={{ flex: 1, padding: 12 }}
-				contentContainerStyle={{ gap: 12 }}
+				style={styles.scroll}
+				contentContainerStyle={styles.scrollContent}
 			>
 				<Text style={sharedStyles.text}>
 					{'Waypoints (Position[]):'}
@@ -132,12 +142,7 @@ const GeoJSONWaypointsExample: FC<{ height: number; width: number }> = ({
 							<Text
 								style={[
 									sharedStyles.text,
-									{
-										fontWeight:
-											profile === 'bicycle'
-												? 'bold'
-												: 'normal',
-									},
+									{ fontWeight: bikeWeight },
 								]}
 							>
 								{'bicycle'}
@@ -147,12 +152,7 @@ const GeoJSONWaypointsExample: FC<{ height: number; width: number }> = ({
 							<Text
 								style={[
 									sharedStyles.text,
-									{
-										fontWeight:
-											profile === 'foot'
-												? 'bold'
-												: 'normal',
-									},
+									{ fontWeight: footWeight },
 								]}
 							>
 								{'foot'}
@@ -189,6 +189,14 @@ const GeoJSONWaypointsExample: FC<{ height: number; width: number }> = ({
 		</View>
 	);
 };
+
+// ── Styles ────────────────────────────────────────────────────────────
+
+const styles = StyleSheet.create({
+	container: { flex: 1 },
+	scroll: { flex: 1, padding: 12 },
+	scrollContent: { gap: 12 },
+});
 
 // ── Export ────────────────────────────────────────────────────────────
 
