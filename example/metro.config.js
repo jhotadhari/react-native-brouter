@@ -16,10 +16,12 @@ module.exports = {
   watchFolders: [
     ...(config.watchFolders ?? []),
     root,
-    path.join(root, 'node_modules'),
   ],
   resolver: {
     ...config.resolver,
-    unstable_enableSymlinks: true,
+    extraNodeModules: {
+      ...(config.resolver?.extraNodeModules ?? {}),
+      'react-native-brouter': root,
+    },
   },
 };

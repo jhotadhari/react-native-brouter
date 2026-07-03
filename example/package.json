@@ -9,7 +9,8 @@
   },
   "dependencies": {
     "react": "^19.2.7",
-    "react-native": "^0.86.0"
+    "react-native": "^0.86.0",
+    "react-native-brouter": "workspace:*"
   },
   "devDependencies": {
     "@babel/core": "^7",

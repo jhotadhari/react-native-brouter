@@ -10570,11 +10570,12 @@ __metadata:
     "@types/react": ^19.2.17
     react: ^19.2.7
     react-native: ^0.86.0
+    react-native-brouter: "workspace:*"
     react-native-builder-bob: ^0.43.0
   languageName: unknown
   linkType: soft
 
-"react-native-brouter@workspace:.":
+"react-native-brouter@workspace:*, react-native-brouter@workspace:.":
   version: 0.0.0-use.local
   resolution: "react-native-brouter@workspace:."
   dependencies:
