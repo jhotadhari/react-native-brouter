@@ -138,14 +138,24 @@ function parseJsonTrack(
 	waypoints: FeatureCollection<Point>;
 	summary: RouteSummary;
 } {
-	const features = JSON.parse(raw) as Array<{
-		type: 'Feature';
-		geometry: {
-			type: string;
-			coordinates: unknown;
-		};
-		properties: Record<string, unknown>;
-	}>;
+	const parsed = JSON.parse(raw) as unknown;
+
+	// BRouter may return a bare array of features or a FeatureCollection
+	// wrapper. Handle both shapes.
+	let features: Array<unknown>;
+	if (Array.isArray(parsed)) {
+		features = parsed;
+	} else if (
+		parsed != null &&
+		typeof parsed === 'object' &&
+		'features' in parsed &&
+		Array.isArray((parsed as Record<string, unknown>).features)
+	) {
+		features = (parsed as Record<string, unknown>)
+			.features as Array<unknown>;
+	} else {
+		throw new Error('Unexpected BRouter JSON shape: ' + typeof parsed);
+	}
 
 	// Separate track features from waypoint features
 	const trackFeatures: Array<
@@ -157,7 +167,15 @@ function parseJsonTrack(
 	let descentMeters: number | undefined;
 	let trackPointCount = 0;
 
-	for (const feature of features) {
+	for (const rawFeature of features) {
+		const feature = rawFeature as {
+			type: 'Feature';
+			geometry: {
+				type: string;
+				coordinates: unknown;
+			};
+			properties: Record<string, unknown>;
+		};
 		if (feature.geometry.type === 'LineString') {
 			const coords = feature.geometry.coordinates as Position[];
 			trackFeatures.push({
