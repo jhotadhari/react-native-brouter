@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.module.annotations.ReactModule;
 
@@ -64,7 +65,9 @@ public class BRouterModule extends NativeBRouterSpec {
 	}
 
 	@Override
+	@ReactMethod
 	public void getRoute( @NonNull ReadableMap params, @NonNull Promise promise ) {
+		android.util.Log.d( "BRouterModule", "getRoute keys: " + params.toHashMap().keySet() );
 		try {
 			// Validate waypoints
 			if ( ! params.hasKey( "lonlats" ) || ! params.hasKey( "lats" ) || ! params.hasKey( "lons" ) ) {

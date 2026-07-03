@@ -167,8 +167,8 @@ function parseJsonTrack(
 	let descentMeters: number | undefined;
 	let trackPointCount = 0;
 
-	for (const rawFeature of features) {
-		const feature = rawFeature as {
+	for (let fi = 0; fi < features.length; fi++) {
+		const feature = features[fi] as {
 			type: 'Feature';
 			geometry: {
 				type: string;
@@ -328,7 +328,8 @@ export function polygonToNogoAreas(
 			? [geometry.coordinates]
 			: geometry.coordinates;
 
-	for (const rings of polygons) {
+	for (let pi = 0; pi < polygons.length; pi++) {
+		const rings = polygons[pi]!;
 		const outerRing = rings[0];
 		if (!outerRing || outerRing.length === 0) {
 			continue;
@@ -337,7 +338,8 @@ export function polygonToNogoAreas(
 		// Compute centroid (average of all vertices)
 		let sumLng = 0;
 		let sumLat = 0;
-		for (const pos of outerRing) {
+		for (let oi = 0; oi < outerRing.length; oi++) {
+			const pos = outerRing[oi]!;
 			sumLng += pos[0]!;
 			sumLat += pos[1]!;
 		}
@@ -346,7 +348,8 @@ export function polygonToNogoAreas(
 
 		// Compute max distance from centroid to any vertex as radius
 		let maxDist = 0;
-		for (const pos of outerRing) {
+		for (let oi = 0; oi < outerRing.length; oi++) {
+			const pos = outerRing[oi]!;
 			const dLng =
 				(pos[0]! - centerLng) * Math.cos((centerLat * Math.PI) / 180);
 			const dLat = pos[1]! - centerLat;

@@ -101,7 +101,8 @@ function serializeNogos(nogos: RouteRequest['nogos']): Record<string, unknown> {
 	const nogoLons: number[] = [];
 	const nogoRadi: number[] = [];
 
-	for (const nogo of nogos) {
+	for (let ni = 0; ni < nogos.length; ni++) {
+		const nogo = nogos[ni]!;
 		const lng = nogo.position[0] as number;
 		const lat = nogo.position[1] as number;
 		let part = `${lng},${lat},${nogo.radiusMeters}`;
