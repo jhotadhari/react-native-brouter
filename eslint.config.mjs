@@ -28,6 +28,7 @@ export default defineConfig([
       'node_modules/',
       'lib/',
       '.yalc/',
+      'android/build/',
     ],
   },
 ]);
