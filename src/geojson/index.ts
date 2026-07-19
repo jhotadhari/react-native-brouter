@@ -31,7 +31,10 @@ import type {
 	Position,
 } from 'geojson';
 
-import { getRoute as coreGetRoute } from '../index';
+import {
+	getRoute as coreGetRoute,
+	isAvailable as coreIsAvailable,
+} from '../index';
 import type {
 	BRouterError,
 	NogoArea,
@@ -236,6 +239,18 @@ function parseJsonTrack(
 }
 
 // ── Public API ──────────────────────────────────────────────────────
+
+/**
+ * Check whether the BRouter Android app is installed on this device.
+ *
+ * Re-exported from the core module for convenience so that consumers of
+ * the geojson entry point don't need a separate import.
+ *
+ * @returns `true` if the BRouter app appears to be installed.
+ */
+export async function isAvailable(): Promise<boolean> {
+	return coreIsAvailable();
+}
 
 /**
  * Request a route from the BRouter Android app using GeoJSON types.

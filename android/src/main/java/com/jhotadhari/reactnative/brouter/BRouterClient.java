@@ -176,6 +176,19 @@ public class BRouterClient {
 	}
 
 	/**
+	 * Quick check whether the BRouter app is installed, without starting
+	 * the service process or waiting for a connection.
+	 *
+	 * <p>This is a static, fire-and-forget check — it does not affect the
+	 * state of any existing {@link BRouterClient} instance.
+	 *
+	 * @return {@code true} if the BRouter service component can be resolved.
+	 */
+	public static boolean checkAvailable( @NonNull Context ctx ) {
+		return BRouterServiceConnection.checkAvailable( ctx );
+	}
+
+	/**
 	 * Whether the service is currently connected and alive.
 	 */
 	public synchronized boolean isConnected() {

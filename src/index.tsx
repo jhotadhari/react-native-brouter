@@ -315,6 +315,23 @@ function normalizeError(e: unknown): BRouterError {
 }
 
 /**
+ * Check whether the BRouter Android app is installed on this device.
+ *
+ * Performs a quick package-resolution check without starting the BRouter
+ * service process.  Safe to call at any time — it does not affect
+ * in-progress routing requests.
+ *
+ * @returns `true` if the BRouter app appears to be installed, `false` otherwise.
+ */
+export async function isAvailable(): Promise<boolean> {
+	try {
+		return await NativeBRouter.isAvailable();
+	} catch {
+		return false;
+	}
+}
+
+/**
  * Request a route from the BRouter Android app.
  *
  * This is the core API entry point. It validates the request, serializes

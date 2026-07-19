@@ -50,5 +50,29 @@ public class BRouterServiceConnection implements ServiceConnection {
 		}
 		return conn;
 	}
+
+	/**
+	 * Quick check whether the BRouter app is installed on this device.
+	 *
+	 * <p>Attempts to bind the service.  If {@code bindService()} returns
+	 * {@code false}, the target component could not be resolved — the app is
+	 * not installed (or the {@code <queries>} entry is missing on API 30+).
+	 *
+	 * <p>The binding is immediately unbound — this is a point-in-time check,
+	 * not a persistent connection.
+	 *
+	 * @return {@code true} if the BRouter service can be resolved,
+	 *         {@code false} if the app does not appear to be installed.
+	 */
+	public static boolean checkAvailable( @NonNull Context ctx ) {
+		BRouterServiceConnection conn = new BRouterServiceConnection();
+		Intent intent = new Intent();
+		intent.setClassName("btools.routingapp", "btools.routingapp.BRouterService");
+		boolean bound = ctx.bindService( intent, conn, Context.BIND_AUTO_CREATE );
+		if ( bound ) {
+			ctx.unbindService( conn );
+		}
+		return bound;
+	}
 }
 

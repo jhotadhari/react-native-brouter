@@ -66,6 +66,18 @@ public class BRouterModule extends NativeBRouterSpec {
 
 	@Override
 	@ReactMethod
+	public void isAvailable( @NonNull Promise promise ) {
+		try {
+			boolean available = BRouterClient.checkAvailable( getReactApplicationContext() );
+			promise.resolve( available );
+		} catch ( Exception e ) {
+			e.printStackTrace();
+			promise.reject( BRouterError.UNKNOWN, e.toString() );
+		}
+	}
+
+	@Override
+	@ReactMethod
 	public void getRoute( @NonNull ReadableMap params, @NonNull Promise promise ) {
 		android.util.Log.d( "BRouterModule", "getRoute keys: " + params.toHashMap().keySet() );
 		try {
