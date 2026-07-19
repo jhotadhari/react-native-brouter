@@ -6,6 +6,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 `react-native-brouter` is a React Native **Turbo Module for Android only** (no iOS implementation, despite the `ios/generated` scaffold from create-react-native-library). It lets a React Native app talk to the separately-installed [BRouter](https://github.com/abrensch/brouter) Android app via its AIDL service interface, for offline routing/navigation based on OpenStreetMap data. The consuming app must declare a `<queries>` entry for `btools.routingapp` in its `AndroidManifest.xml` (see README) or the service bind will silently fail.
 
+## Edit Tool - Whitespace Workaround
+
+For `.ts`/`.tsx`/`.js`/`.jsx` files: match `old_string` in Edit calls **without** leading
+whitespace (to avoid the tab-vs-space ambiguity described in
+[claude-code/#26996](https://github.com/anthropics/claude-code/issues/26996)). Accumulate all
+touched files, then run one `npx prettier --write <file1> <file2> ...` at the end to fix
+indentation. Only include leading whitespace when needed to disambiguate non-unique matches.
+
+For `.java` files, `yarn format` doesn't cover them — fall back to `sed` with explicit `\t`
+escapes after a single failed Edit attempt.
+
 ### Two API layers
 
 The library exports two entry points:
