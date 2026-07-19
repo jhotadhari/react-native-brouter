@@ -301,10 +301,7 @@ export async function getRoute(
 		try {
 			geoResult.parsed = parseJsonTrack(result.raw, request.waypoints);
 		} catch (e: unknown) {
-			console.warn(
-				'Failed to parse BRouter JSON track:',
-				e instanceof Error ? e.message : String(e)
-			);
+			throw new Error(result.raw);
 		}
 	}
 
