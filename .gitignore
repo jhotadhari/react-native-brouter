@@ -61,6 +61,10 @@ buck-out/
 android/app/libs
 android/keystores/debug.keystore
 
+# Yalc
+.yalc
+yalc.lock
+
 # Yarn
 .yarn/*
 !.yarn/patches
